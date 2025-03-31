@@ -63,8 +63,10 @@ async function fetchValkeyCommands(): Promise<Command[]> {
       showToast(Toast.Style.Failure, "No commands found", "The page structure might have changed.");
     }
     return commands;
-  } catch (error: unknown) {
-    showToast(Toast.Style.Failure, "Failed to fetch commands", error.message);
+  } catch (error) {
+    if (error instanceof Error) {
+      showToast(Toast.Style.Failure, "Failed to fetch commands", error.message);
+    }
     return [];
   }
 }
