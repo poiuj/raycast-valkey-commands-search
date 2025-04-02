@@ -88,8 +88,11 @@ async function getCommands(forceRefresh: boolean = false): Promise<Command[]> {
   }
 
   const commands = await fetchValkeyCommands();
-  await LocalStorage.setItem(CACHE_KEY, JSON.stringify(commands));
-  await LocalStorage.setItem(CACHE_TIMESTAMP_KEY, now);
+  if (commands.length > 0) {
+    await LocalStorage.setItem(CACHE_KEY, JSON.stringify(commands));
+    await LocalStorage.setItem(CACHE_TIMESTAMP_KEY, now);
+  }
+
   return commands;
 }
 
