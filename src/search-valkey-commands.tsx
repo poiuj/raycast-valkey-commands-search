@@ -1,6 +1,6 @@
-import fetchPolyfill from "node-fetch";
+import fetch from "node-fetch";
 if (!globalThis.fetch) {
-  globalThis.fetch = fetchPolyfill;
+  globalThis.fetch = fetch;
 }
 
 import { List, ActionPanel, Action, Toast, LocalStorage } from "@raycast/api";
