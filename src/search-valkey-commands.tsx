@@ -3,7 +3,8 @@ if (!globalThis.fetch) {
   globalThis.fetch = fetchPolyfill;
 }
 
-import { List, ActionPanel, Action, showToast, Toast, LocalStorage } from "@raycast/api";
+import { List, ActionPanel, Action, Toast, LocalStorage } from "@raycast/api";
+import { showFailureToast } from "@raycast/utils"
 import { useState, useEffect } from "react";
 import * as cheerio from "cheerio";
 
@@ -60,12 +61,12 @@ async function fetchValkeyCommands(): Promise<Command[]> {
     });
 
     if (commands.length === 0) {
-      showToast(Toast.Style.Failure, "No commands found", "The page structure might have changed.");
+      showFailureToast("The page structure might have changed.", { title: "No commands found" });
     }
     return commands;
   } catch (error) {
     if (error instanceof Error) {
-      showToast(Toast.Style.Failure, "Failed to fetch commands", error.message);
+      showFailureToast(error, { title: "Failed to fetch commands" })
     }
     return [];
   }
