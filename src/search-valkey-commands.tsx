@@ -73,29 +73,31 @@ export default function CommandSearch() {
     }
   );
 
+  // Group commands by category
+  const byCategory = commands.reduce<Record<string, Command[]>>((acc, cmd) => {
+    (acc[cmd.category] ||= []).push(cmd);
+    return acc;
+  }, {});
+
   return (
-    <List
-      isLoading={isLoading}
-      searchBarPlaceholder="Search Valkey commands..."
-      actions={
-        <ActionPanel>
-          <Action title="Reload Commands" onAction={revalidate} />
-        </ActionPanel>
-      }
-    >
-      {commands.map((cmd) => (
-        <List.Item
-          key={cmd.id}
-          title={cmd.name}
-          subtitle={cmd.description}
-          accessories={[{ text: cmd.category }]}
-          keywords={[cmd.category]}
-          actions={
-            <ActionPanel>
-              <Action.OpenInBrowser url={cmd.url} title="Open in Browser" />
-            </ActionPanel>
-          }
-        />
+    <List isLoading={isLoading} searchBarPlaceholder="Search Valkey commands...">
+      {Object.entries(byCategory).map(([category, cmds]) => (
+        <List.Section title={category} key={category}>
+          {cmds.map((cmd) => (
+            <List.Item
+              key={cmd.id}
+              title={cmd.name}
+              keywords={[category]}
+              subtitle={cmd.description}
+              actions={
+                <ActionPanel>
+                  <Action.OpenInBrowser url={cmd.url} title="Open Command Page" />
+                  <Action title="Reload Commands" onAction={revalidate} />
+                </ActionPanel>
+              }
+            />
+          ))}
+        </List.Section>
       ))}
     </List>
   );
